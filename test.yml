@@ -1,6 +1,6 @@
 ---
 - name: Some playbook
-  hosts: server1
+  hosts: localhost
 
   vars_prompt:
     - name: repo_path
