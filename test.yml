@@ -1,0 +1,80 @@
+---
+- name: Some playbook
+  hosts: server1
+
+  vars_prompt:
+    - name: repo_path
+      prompt: specify repo path
+      private: false
+    - name: clone_sub
+      prompt: specify local clone subdir
+      private: false
+
+  tasks:
+  - name: Install "git" package
+    ansible.builtin.apt:
+      name: git
+      state: latest
+  - name: Print a message
+    ansible.builtin.debug:
+      msg: 'Cloning {{ repo_path }}'
+
+  - name: Creates directory
+    file:
+      path: /scratch/{{ clone_sub }}/
+      state: directory
+
+  - name: Example clone 
+    ansible.builtin.git:
+      repo: '{{ repo_path }}'
+      dest: /scratch/{{ clone_sub }}/
+      single_branch: yes
+      version: master
+
+
+  # - name: Gather the package facts
+  #   ansible.builtin.package_facts:
+  #     manager: auto
+
+  # - name: Check whether a package called git is installed
+  #   ansible.builtin.debug:
+  #     msg: "{{ ansible_facts.packages['git'] | length }} versions of git are installed!"
+  #   when: "'git' in ansible_facts.packages"
+
+
+
+  # - name: Print something
+  #   ansible.builtin.debug:
+  #     msg: "Printing a test message"
+  # - name: Touch some files
+  #   ansible.builtin.file:
+  #     dest: "{{ item.path }}"
+  #     state: touch
+  #     mode: "{{ item.mode | default(omit) }}"
+  #   loop:
+  #     - path: /tmp/foo
+  #     - path: /tmp/bar
+  #     - path: /tmp/baz
+  #       mode: "0444"
+  # - name: Install ASReview LAB through pip
+  #   pip:
+  #     name: asreview
+
+  # - name: Print the package facts
+  #   ansible.builtin.debug:
+  #     var: ansible_facts.packages
+
+  # - name: Remove "git" package
+  #   ansible.builtin.apt:
+  #     name: git
+  #     state: absent
+
+  # - name: Gather the package facts
+  #   ansible.builtin.package_facts:
+  #     manager: auto
+
+  # - name: Check whether a package called git is installed
+  #   ansible.builtin.debug:
+  #     msg: "{{ ansible_facts.packages['git'] | length }} versions of git are installed!"
+  #   when: "'git' in ansible_facts.packages"
+
